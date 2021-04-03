@@ -487,6 +487,7 @@ async def floor(ctx, Efloor=None):
                                   f'Shadow Assassin Boots : {getpriceof("Shadow Assassin Boots", Global_Database):,d}\n'
                                   f'Warped Stone : {getpriceof("Warped Stone", Global_Database):,d}\n'
                                   f'Dark Orb : {getpriceof("Dark Orb", Global_Database):,d}\n'
+                                  f'Last Breath : {getpriceof("Last Breath", Global_Database):,d}\n'
                                   f'Livid Dagger : {getpriceof("Livid Dagger", Global_Database):,d}\n'
                                   f'Fuming Potato Book : {int(getbazaarprice("FUMING_POTATO_BOOK")):,d}\n'
                                   f'Recombobulator 3000 : {int(getbazaarprice("RECOMBOBULATOR_3000")):,d}'
