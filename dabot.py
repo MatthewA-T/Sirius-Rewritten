@@ -17,28 +17,31 @@ bot.remove_command('help')
 
 @tasks.loop(minutes=5)
 async def updateDB():
-    await bot.wait_until_ready()  # waits until the bot is on
-    game = discord.Game(
-        f"with {sum([i.member_count for i in bot.guilds])} discord users on {len(bot.guilds)} different servers")
-    await bot.change_presence(status=discord.Status.online, activity=game)
-    global Global_Database
-    Global_Database.clear()  # clears the old database
-    t = perf_counter()  # starts a timer
-    url = 'https://api.hypixel.net/skyblock/auctions?page=1'
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as resp:
-            pages = await resp.json()  # This whole section pulls how many pages of data there are
-            if (pages['success'] == True):
-                pages = pages['totalPages']
-    for i in range(pages):
-        url = f'https://api.hypixel.net/skyblock/auctions?page={i}'
+    try:
+        await bot.wait_until_ready()  # waits until the bot is on
+        game = discord.Game(
+            f"with {sum([i.member_count for i in bot.guilds])} discord users on {len(bot.guilds)} different servers")
+        await bot.change_presence(status=discord.Status.online, activity=game)
+        global Global_Database
+        Global_Database.clear()  # clears the old database
+        t = perf_counter()  # starts a timer
+        url = 'https://api.hypixel.net/skyblock/auctions?page=1'
         async with aiohttp.ClientSession() as session:
-            async with session.get(url) as resp:  # Grabs all the auction data
-                pages = await resp.json()
-                Global_Database.append(pages['auctions'])
-                # NOTE you could make a specific search faster by filtering off non BINS first
-                # This could also (probably) be multi processed if you know how to do that
-    print(f"Finished in {perf_counter() - t} seconds")
+            async with session.get(url) as resp:
+                pages = await resp.json()  # This whole section pulls how many pages of data there are
+                if (pages['success'] == True):
+                    pages = pages['totalPages']
+        for i in range(pages):
+            url = f'https://api.hypixel.net/skyblock/auctions?page={i}'
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as resp:  # Grabs all the auction data
+                    pages = await resp.json()
+                    Global_Database.append(pages['auctions'])
+                    # NOTE you could make a specific search faster by filtering off non BINS first
+                    # This could also (probably) be multi processed if you know how to do that
+        print(f"Finished in {perf_counter() - t} seconds")
+    except:
+        pass
 
 
 @bot.event
